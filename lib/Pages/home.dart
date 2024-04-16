@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class Home extends StatelessWidget {
-  const Home({super.key});
+  Function _miniPlayer;
+  Home(this._miniPlayer);
 
   Widget createCategory(category category) {
     return Container(
@@ -45,12 +46,18 @@ class Home extends StatelessWidget {
         padding: const EdgeInsets.all(10.0),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Container(
-              height: 200,
-              width: 200,
+            height: 200,
+            width: 200,
+            child: InkWell(
+              onTap: () {
+                _miniPlayer(music);
+              },
               child: Image.network(
                 music.image,
                 fit: BoxFit.cover,
-              )),
+              ),
+            ),
+          ),
           Text(
             music.name,
             style: TextStyle(color: Colors.white),

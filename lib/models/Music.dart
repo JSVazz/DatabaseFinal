@@ -4,6 +4,7 @@ class Music {
   String name;
   String image;
   String desc;
+  String AudioURL;
 
-  Music(this.name, this.image, this.desc);
+  Music(this.name, this.image, this.desc, this.AudioURL);
 }
