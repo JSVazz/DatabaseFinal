@@ -9,18 +9,18 @@ CREATE TABLE Author (
 CREATE TABLE Source (
     sourceID INTEGER PRIMARY KEY,
     author TEXT,
-    year INTEGER,
+    year TEXT,
     type TEXT
 );
 
 -- Quote table
 CREATE TABLE Quote (
     quoteID INTEGER PRIMARY KEY,
-    sourceID INTEGER,
+    srcID INTEGER,
     text TEXT,
-    authorID INTEGER,
-    FOREIGN KEY (sourceID) REFERENCES Source(sourceID),
-    FOREIGN KEY (authorID) REFERENCES Author(authorID)
+    authID INTEGER,
+    FOREIGN KEY (srcID) REFERENCES Source(sourceID),
+    FOREIGN KEY (authID) REFERENCES Author(authorID)
 );
 
 -- Category table
@@ -39,15 +39,6 @@ CREATE TABLE QuoteCategory (
     FOREIGN KEY (categoryID) REFERENCES Category(categoryID)
 );
 
--- Feedback table
-CREATE TABLE Feedback (
-    feedbackID INTEGER PRIMARY KEY,
-    dateSubmitted INTEGER,
-    comment TEXT,
-    quoteID INTEGER,
-    FOREIGN KEY (quoteID) REFERENCES Quote(quoteID)
-);
-
 -- User table
 CREATE TABLE User (
     email TEXT PRIMARY KEY,
@@ -55,11 +46,8 @@ CREATE TABLE User (
     username TEXT
 );
 
--- UserFeedback linking table
-CREATE TABLE UserFeedback (
-    email TEXT,
-    feedbackID INTEGER,
-    PRIMARY KEY (email, feedbackID),
-    FOREIGN KEY (email) REFERENCES User(email),
-    FOREIGN KEY (feedbackID) REFERENCES Feedback(feedbackID)
+-- Image table
+CREATE TABLE Image (
+    imageID INTEGER PRIMARY KEY,
+    imageURL TEXT
 );
