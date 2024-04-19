@@ -5,6 +5,10 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:audio_player/models/author.dart';
 import 'package:audio_player/models/source.dart';
+import 'package:audio_player/models/quote.dart';
+import 'package:audio_player/models/categorydb.dart';
+import 'package:audio_player/models/image.dart';
+import 'package:audio_player/models/user.dart';
 
 class DatabaseHelper {
   static DatabaseHelper? _databaseHelper;
@@ -163,7 +167,7 @@ class DatabaseHelper {
     return db.delete('Author', where: 'authorID = ?', whereArgs: [id]);
   }
 
-  //Crud opperations for Source table\
+  //CRUD opperations for Source table
   // Create a new source
   Future<void> insertSource(source source) async {
     final db = await database;
@@ -174,7 +178,7 @@ class DatabaseHelper {
     );
   }
 
-// Retrieve all sources
+  // Retrieve all sources
   Future<List<source>> getAllSources() async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query('Source');
@@ -183,7 +187,7 @@ class DatabaseHelper {
     });
   }
 
-// Retrieve a specific source by its ID
+  // Retrieve a specific source by its ID
   Future<source?> getSourceById(int id) async {
     final db = await database;
     final List<Map<String, dynamic>> maps =
@@ -192,7 +196,7 @@ class DatabaseHelper {
     return source.fromMap(maps.first);
   }
 
-// Update a source
+  // Update a source
   Future<void> updateSource(source source) async {
     final db = await database;
     await db.update(
@@ -203,13 +207,190 @@ class DatabaseHelper {
     );
   }
 
-// Delete a source
+  // Delete a source
   Future<void> deleteSource(int id) async {
     final db = await database;
     await db.delete(
       'Source',
       where: 'sourceID = ?',
       whereArgs: [id],
+    );
+  }
+
+  //CRUD opperations for Quote table
+  // Method to insert a new quote into the database
+  Future<int> createQuote(quote quote) async {
+    final db = await database;
+    return db.insert('Quote', quote.toMap());
+  }
+
+  // Method to retrieve all quotes from the database
+  Future<List<quote>> getAllQuotes() async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query('Quote');
+    return List.generate(maps.length, (i) {
+      return quote.fromMap(maps[i]);
+    });
+  }
+
+  // Method to retrieve a quote by its ID
+  Future<quote?> getQuoteById(int id) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps =
+        await db.query('Quote', where: 'quoteID = ?', whereArgs: [id]);
+    if (maps.isEmpty) return null;
+    return quote.fromMap(maps.first);
+  }
+
+  // Method to update an existing quote in the database
+  Future<int> updateQuote(quote quote) async {
+    final db = await database;
+    return db.update('Quote', quote.toMap(),
+        where: 'quoteID = ?', whereArgs: [quote.quoteId]);
+  }
+
+  // Method to delete a quote from the database
+  Future<int> deleteQuote(int id) async {
+    final db = await database;
+    return db.delete('Quote', where: 'quoteID = ?', whereArgs: [id]);
+  }
+
+  //CRUD opperations for Category table
+  // Method to insert a new category into the database
+  Future<int> createCategory(Category category) async {
+    final db = await database;
+    return db.insert(categoryTable, category.toMap());
+  }
+
+  // Method to retrieve all categories from the database
+  Future<List<Category>> getAllCategories() async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(categoryTable);
+    return List.generate(maps.length, (i) {
+      return Category.fromMap(maps[i]);
+    });
+  }
+
+  // Method to retrieve a category by its ID
+  Future<Category?> getCategoryById(int id) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db
+        .query(categoryTable, where: '$colCategoryId = ?', whereArgs: [id]);
+    if (maps.isEmpty) return null;
+    return Category.fromMap(maps.first);
+  }
+
+  // Method to update an existing category in the database
+  Future<int> updateCategory(Category category) async {
+    final db = await database;
+    return db.update(categoryTable, category.toMap(),
+        where: '$colCategoryId = ?', whereArgs: [category.categoryID]);
+  }
+
+  // Method to delete a category from the database
+  Future<int> deleteCategory(int id) async {
+    final db = await database;
+    return db
+        .delete(categoryTable, where: '$colCategoryId = ?', whereArgs: [id]);
+  }
+
+  //CRUD opperations for Image table
+  // Create a new image
+  Future<void> insertImage(ImageModel image) async {
+    final db = await database;
+    await db.insert(
+      imageTable,
+      image.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  // Retrieve all images
+  Future<List<ImageModel>> getAllImages() async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(imageTable);
+    return List.generate(maps.length, (i) {
+      return ImageModel.fromMap(maps[i]);
+    });
+  }
+
+  // Retrieve a specific image by its ID
+  Future<ImageModel?> getImageById(int id) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps =
+        await db.query(imageTable, where: '$colImageId = ?', whereArgs: [id]);
+    if (maps.isEmpty) return null;
+    return ImageModel.fromMap(maps.first);
+  }
+
+  // Update an image
+  Future<void> updateImage(ImageModel image) async {
+    final db = await database;
+    await db.update(
+      imageTable,
+      image.toMap(),
+      where: '$colImageId = ?',
+      whereArgs: [image.imageID],
+    );
+  }
+
+  // Delete an image
+  Future<void> deleteImage(int id) async {
+    final db = await database;
+    await db.delete(
+      imageTable,
+      where: '$colImageId = ?',
+      whereArgs: [id],
+    );
+  }
+
+  //CRUD opperations for User table
+  // Create a new user
+  Future<void> insertUser(user user) async {
+    final db = await database;
+    await db.insert(
+      userTable,
+      user.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+// Retrieve all users
+  Future<List<user>> getAllUsers() async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(userTable);
+    return List.generate(maps.length, (i) {
+      return user.fromMap(maps[i]);
+    });
+  }
+
+// Retrieve a specific user by their email
+  Future<user?> getUserByEmail(String email) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db
+        .query(userTable, where: '$colUserEmail = ?', whereArgs: [email]);
+    if (maps.isEmpty) return null;
+    return user.fromMap(maps.first);
+  }
+
+// Update a user
+  Future<void> updateUser(user user) async {
+    final db = await database;
+    await db.update(
+      userTable,
+      user.toMap(),
+      where: '$colUserEmail = ?',
+      whereArgs: [user.email],
+    );
+  }
+
+// Delete a user
+  Future<void> deleteUser(String email) async {
+    final db = await database;
+    await db.delete(
+      userTable,
+      where: '$colUserEmail = ?',
+      whereArgs: [email],
     );
   }
 }

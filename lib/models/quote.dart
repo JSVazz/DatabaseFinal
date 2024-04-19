@@ -1,5 +1,5 @@
 class quote {
-  late int quoteID;
+  late int quoteId;
   late int srcID;
   late int authID;
   String text;
@@ -11,7 +11,7 @@ class quote {
   });
 
   quote.withId({
-    required this.quoteID,
+    required this.quoteId,
     required this.srcID,
     required this.text,
     required this.authID,
@@ -38,8 +38,8 @@ class quote {
   // Convert Quote object to a Map object
   Map<String, dynamic> toMap() {
     var map = Map<String, dynamic>();
-    if (quoteID != null) {
-      map['quoteID'] = quoteID;
+    if (quoteId != null) {
+      map['quoteID'] = quoteId;
     }
     map['srcID'] = srcID;
     map['text'] = text;
@@ -50,7 +50,7 @@ class quote {
   // Convert a Map object to Quote object
   static quote fromMap(Map<String, dynamic> map) {
     return quote.withId(
-      quoteID: map['quoteID'],
+      quoteId: map['quoteID'],
       srcID: map['srcID'],
       text: map['text'],
       authID: map['authID'],
