@@ -129,7 +129,7 @@ class DatabaseHelper {
     ''');
   }
 
-  //CRUD opperations for Author table
+  //CRUD operations for Author table
   // Method to insert a new author into the database
   Future<int> createAuthor(author author) async {
     final db = await database;
@@ -167,7 +167,7 @@ class DatabaseHelper {
     return db.delete('Author', where: 'authorID = ?', whereArgs: [id]);
   }
 
-  //CRUD opperations for Source table
+  //CRUD operations for Source table
   // Create a new source
   Future<void> insertSource(source source) async {
     final db = await database;
@@ -217,7 +217,7 @@ class DatabaseHelper {
     );
   }
 
-  //CRUD opperations for Quote table
+  //CRUD operations for Quote table
   // Method to insert a new quote into the database
   Future<int> createQuote(quote quote) async {
     final db = await database;
@@ -255,7 +255,7 @@ class DatabaseHelper {
     return db.delete('Quote', where: 'quoteID = ?', whereArgs: [id]);
   }
 
-  //CRUD opperations for Category table
+  //CRUD operations for Category table
   // Method to insert a new category into the database
   Future<int> createCategory(Category category) async {
     final db = await database;
@@ -294,7 +294,7 @@ class DatabaseHelper {
         .delete(categoryTable, where: '$colCategoryId = ?', whereArgs: [id]);
   }
 
-  //CRUD opperations for Image table
+  //CRUD operations for Image table
   // Create a new image
   Future<void> insertImage(ImageModel image) async {
     final db = await database;
@@ -344,7 +344,7 @@ class DatabaseHelper {
     );
   }
 
-  //CRUD opperations for User table
+  //CRUD operations for User table
   // Create a new user
   Future<void> insertUser(user user) async {
     final db = await database;
@@ -355,7 +355,7 @@ class DatabaseHelper {
     );
   }
 
-// Retrieve all users
+  // Retrieve all users
   Future<List<user>> getAllUsers() async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query(userTable);
@@ -364,7 +364,7 @@ class DatabaseHelper {
     });
   }
 
-// Retrieve a specific user by their email
+  // Retrieve a specific user by their email
   Future<user?> getUserByEmail(String email) async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db
@@ -373,7 +373,7 @@ class DatabaseHelper {
     return user.fromMap(maps.first);
   }
 
-// Update a user
+  // Update a user
   Future<void> updateUser(user user) async {
     final db = await database;
     await db.update(
@@ -384,7 +384,7 @@ class DatabaseHelper {
     );
   }
 
-// Delete a user
+  // Delete a user
   Future<void> deleteUser(String email) async {
     final db = await database;
     await db.delete(
