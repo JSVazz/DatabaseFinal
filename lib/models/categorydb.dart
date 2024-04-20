@@ -2,16 +2,20 @@ class Category {
   late int categoryID;
   String categoryName;
   String description;
+  String imageURL;
 
-  Category({
+  Category(
+    int i, {
     required this.categoryName,
     required this.description,
+    required this.imageURL,
   });
 
   Category.withId({
     required this.categoryID,
     required this.categoryName,
     required this.description,
+    required this.imageURL,
   });
 
   // Getter methods for categoryName and description
@@ -33,6 +37,7 @@ class Category {
       'categoryID': categoryID,
       'categoryName': categoryName,
       'description': description,
+      'imageURL': imageURL, // Store imageURL as a string
     };
   }
 
@@ -42,6 +47,7 @@ class Category {
       categoryID: map['categoryID'],
       categoryName: map['categoryName'],
       description: map['description'],
+      imageURL: map['imageURL'], // Fetch imageURL as a string
     );
   }
 }
