@@ -7,7 +7,6 @@ import 'package:audio_player/models/author.dart';
 import 'package:audio_player/models/source.dart';
 import 'package:audio_player/models/quote.dart';
 import 'package:audio_player/models/categorydb.dart';
-import 'package:audio_player/models/image.dart';
 import 'package:audio_player/models/user.dart';
 
 class DatabaseHelper {
@@ -43,10 +42,6 @@ class DatabaseHelper {
   String colCategoryId = 'categoryID';
   String colCategoryName = 'categoryName';
   String colCategoryDescription = 'description';
-
-  // Image Table
-  String imageTable = 'Image';
-  String colImageId = 'imageID';
   String colImageURL = 'imageURL';
 
   // User Table
@@ -107,14 +102,7 @@ class DatabaseHelper {
       CREATE TABLE $categoryTable (
         $colCategoryId INTEGER PRIMARY KEY AUTOINCREMENT,
         $colCategoryName TEXT,
-        $colCategoryDescription TEXT
-      )
-    ''');
-
-    // Create Image table
-    await db.execute('''
-      CREATE TABLE $imageTable (
-        $colImageId INTEGER PRIMARY KEY AUTOINCREMENT,
+        $colCategoryDescription TEXT,
         $colImageURL TEXT
       )
     ''');
@@ -274,8 +262,11 @@ class DatabaseHelper {
   // Method to retrieve a category by its ID
   Future<Category?> getCategoryById(int id) async {
     final db = await database;
-    final List<Map<String, dynamic>> maps = await db
-        .query(categoryTable, where: '$colCategoryId = ?', whereArgs: [id]);
+    final List<Map<String, dynamic>> maps = await db.query(
+      categoryTable,
+      where: '$colCategoryId = ?',
+      whereArgs: [id],
+    );
     if (maps.isEmpty) return null;
     return Category.fromMap(maps.first);
   }
@@ -283,63 +274,20 @@ class DatabaseHelper {
   // Method to update an existing category in the database
   Future<int> updateCategory(Category category) async {
     final db = await database;
-    return db.update(categoryTable, category.toMap(),
-        where: '$colCategoryId = ?', whereArgs: [category.categoryID]);
+    return db.update(
+      categoryTable,
+      category.toMap(),
+      where: '$colCategoryId = ?',
+      whereArgs: [category.categoryID],
+    );
   }
 
   // Method to delete a category from the database
   Future<int> deleteCategory(int id) async {
     final db = await database;
-    return db
-        .delete(categoryTable, where: '$colCategoryId = ?', whereArgs: [id]);
-  }
-
-  //CRUD operations for Image table
-  // Create a new image
-  Future<void> insertImage(ImageModel image) async {
-    final db = await database;
-    await db.insert(
-      imageTable,
-      image.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-  }
-
-  // Retrieve all images
-  Future<List<ImageModel>> getAllImages() async {
-    final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query(imageTable);
-    return List.generate(maps.length, (i) {
-      return ImageModel.fromMap(maps[i]);
-    });
-  }
-
-  // Retrieve a specific image by its ID
-  Future<ImageModel?> getImageById(int id) async {
-    final db = await database;
-    final List<Map<String, dynamic>> maps =
-        await db.query(imageTable, where: '$colImageId = ?', whereArgs: [id]);
-    if (maps.isEmpty) return null;
-    return ImageModel.fromMap(maps.first);
-  }
-
-  // Update an image
-  Future<void> updateImage(ImageModel image) async {
-    final db = await database;
-    await db.update(
-      imageTable,
-      image.toMap(),
-      where: '$colImageId = ?',
-      whereArgs: [image.imageID],
-    );
-  }
-
-  // Delete an image
-  Future<void> deleteImage(int id) async {
-    final db = await database;
-    await db.delete(
-      imageTable,
-      where: '$colImageId = ?',
+    return db.delete(
+      categoryTable,
+      where: '$colCategoryId = ?',
       whereArgs: [id],
     );
   }

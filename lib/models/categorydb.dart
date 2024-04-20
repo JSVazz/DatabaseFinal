@@ -18,6 +18,13 @@ class Category {
     required this.imageURL,
   });
 
+  // New constructor without ID
+  Category.withoutID({
+    required this.categoryName,
+    required this.description,
+    required this.imageURL,
+  });
+
   // Getter methods for categoryName and description
   String get categoryCategoryName => categoryName;
   String get categoryDescription => description;

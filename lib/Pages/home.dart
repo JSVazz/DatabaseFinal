@@ -1,15 +1,14 @@
 import 'package:audio_player/models/Music.dart';
-import 'package:audio_player/models/category.dart';
+import 'package:audio_player/models/categorydb.dart';
 import 'package:audio_player/services/CategoryOperations.dart';
 import 'package:audio_player/services/MusicOperations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class Home extends StatelessWidget {
-  Function _miniPlayer;
-  Home(this._miniPlayer);
+  final Function _miniPlayer;
+  const Home(this._miniPlayer, {super.key});
 
-  Widget createCategory(category category) {
+  Widget createCategory(Category category) {
     return Container(
       color: Colors.blueGrey.shade300,
       child: Row(
@@ -22,7 +21,7 @@ class Home extends StatelessWidget {
           ),
           const Padding(padding: EdgeInsets.only(left: 8.0)),
           Text(
-            category.name,
+            category.categoryName,
             style: const TextStyle(color: Colors.white),
           )
         ],
@@ -30,12 +29,13 @@ class Home extends StatelessWidget {
     );
   }
 
-  List<Widget> CreatelistOfCategories() {
-    List<category> categoryList =
-        CategoryOperations.getCategories(); // recived data
+  // ignore: non_constant_identifier_names
+  Future<List<Widget>> CreatelistOfCategories() async {
+    List<Category> categoryList =
+        await CategoryOperations.getCategories(); // await the result
     // convert data to widget using map function
     List<Widget> categories = categoryList
-        .map((category category) => createCategory(category))
+        .map((Category category) => createCategory(category))
         .toList();
 
     return categories;
@@ -45,7 +45,7 @@ class Home extends StatelessWidget {
     return Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Container(
+          SizedBox(
             height: 200,
             width: 200,
             child: InkWell(
@@ -60,11 +60,11 @@ class Home extends StatelessWidget {
           ),
           Text(
             music.name,
-            style: TextStyle(color: Colors.white),
+            style: const TextStyle(color: Colors.white),
           ),
           Text(
             music.desc,
-            style: TextStyle(color: Colors.white),
+            style: const TextStyle(color: Colors.white),
           ),
         ]));
   }
@@ -81,7 +81,7 @@ class Home extends StatelessWidget {
                     color: Colors.white,
                     fontSize: 20,
                     fontWeight: FontWeight.bold)),
-            Container(
+            SizedBox(
               height: 300,
               child: ListView.builder(
                   scrollDirection: Axis.horizontal,
@@ -94,17 +94,28 @@ class Home extends StatelessWidget {
         ));
   }
 
-  Widget createGird() {
-    return Container(
-      padding: const EdgeInsets.all(10),
-      height: 285,
-      child: GridView.count(
-        childAspectRatio: 5 / 2,
-        mainAxisSpacing: 10,
-        crossAxisSpacing: 10,
-        crossAxisCount: 2,
-        children: CreatelistOfCategories(),
-      ),
+  Widget createGrid() {
+    return FutureBuilder<List<Widget>>(
+      future: CreatelistOfCategories(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else {
+          return Container(
+            padding: const EdgeInsets.all(10),
+            height: 285,
+            child: GridView.count(
+              childAspectRatio: 5 / 2,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
+              crossAxisCount: 2,
+              children: snapshot.data!,
+            ),
+          );
+        }
+      },
     );
   }
 
@@ -135,10 +146,10 @@ class Home extends StatelessWidget {
         child: Column(
           children: [
             createAppBar("howdy"),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
-            createGird(),
+            createGrid(),
             createMusicList('Made For You'),
             createMusicList('popular Playlists')
           ],
