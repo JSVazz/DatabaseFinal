@@ -40,8 +40,10 @@ class Home extends StatelessWidget {
 
   Widget createQuote(quote quote) {
     return Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      padding: const EdgeInsets.all(10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
           SizedBox(
             height: 200,
             width: 200,
@@ -59,12 +61,9 @@ class Home extends StatelessWidget {
             quote.quoteText,
             style: const TextStyle(color: Colors.white),
           ),
-          Text(
-            // Assuming you want to display author's name
-            quote.author,
-            style: const TextStyle(color: Colors.white),
-          ),
-        ]));
+        ],
+      ),
+    );
   }
 
   Widget createQuoteList(String label) {
