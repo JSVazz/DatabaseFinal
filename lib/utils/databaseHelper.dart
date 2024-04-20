@@ -36,6 +36,8 @@ class DatabaseHelper {
   String colQuoteSourceId = 'sourceID';
   String colQuoteText = 'text';
   String colQuoteAuthorId = 'authorID';
+  String colImageURL2 = 'imageURL';
+  String colAudioURL = 'audioURL';
 
   // Category Table
   String categoryTable = 'Category';
@@ -80,22 +82,27 @@ class DatabaseHelper {
         $colOccupation TEXT)
         ''');
     // create Source table
-    await db.execute('''CREATE TABLE $sourceTable(
-          $colSourceId INTEGER PRIMARY KEY AUTOINCREMENT, 
-          $colSourceAuthor TEXT, 
-          $colSourceYear TEXT,
-          $colSourceYear TEXT)
-          ''');
+    await db.execute('''
+      CREATE TABLE $sourceTable(
+        $colSourceId INTEGER PRIMARY KEY AUTOINCREMENT, 
+        $colSourceAuthor TEXT, 
+        $colSourceYear TEXT,
+        $colSourceYear TEXT)
+      ''');
+
     // create Quote table
     await db.execute('''
-        CREATE TABLE $quoteTable (
-          $colQuoteId INTEGER PRIMARY KEY AUTOINCREMENT,
-          $colQuoteSourceId INTEGER,
-          $colQuoteText TEXT,
-          $colQuoteAuthorId INTEGER,
-          FOREIGN KEY ($colQuoteSourceId) REFERENCES $sourceTable($colSourceId),
-          FOREIGN KEY ($colQuoteAuthorId) REFERENCES $authorTable($colAuthorId))
-          ''');
+      CREATE TABLE $quoteTable (
+        $colQuoteId INTEGER PRIMARY KEY AUTOINCREMENT,
+        $colQuoteSourceId INTEGER,
+        $colQuoteText TEXT,
+        $colQuoteAuthorId INTEGER,
+        $colImageURL2 TEXT,
+        $colAudioURL TEXT,
+        FOREIGN KEY ($colQuoteSourceId) REFERENCES $sourceTable($colSourceId),
+        FOREIGN KEY ($colQuoteAuthorId) REFERENCES $authorTable($colAuthorId)
+      )
+    ''');
 
     // Create Category table
     await db.execute('''
@@ -206,41 +213,68 @@ class DatabaseHelper {
   }
 
   //CRUD operations for Quote table
-  // Method to insert a new quote into the database
-  Future<int> createQuote(quote quote) async {
-    final db = await database;
-    return db.insert('Quote', quote.toMap());
+  // Insert a quote into the database
+  Future<int> insertQuote(quote quote) async {
+    Database db = await database;
+    int result = await db.insert(quoteTable, quote.toMap());
+    return result;
   }
 
-  // Method to retrieve all quotes from the database
+  // Retrieve a quote from the database based on its ID
+  Future<quote?> getQuote(int id) async {
+    final db = await database;
+    List<Map<String, dynamic>> maps = await db.query(
+      quoteTable,
+      columns: [
+        colQuoteId,
+        colQuoteSourceId,
+        colQuoteText,
+        colQuoteAuthorId,
+        colImageURL,
+        colAudioURL,
+      ],
+      where: '$colQuoteId = ?',
+      whereArgs: [id],
+    );
+    if (maps.isNotEmpty) {
+      return quote.fromMap(maps.first);
+    } else {
+      return null;
+    }
+  }
+
+  // Retrieve all quotes from the database
   Future<List<quote>> getAllQuotes() async {
-    final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query('Quote');
-    return List.generate(maps.length, (i) {
-      return quote.fromMap(maps[i]);
-    });
+    Database db = await database;
+    List<Map<String, dynamic>> maps = await db.query(quoteTable);
+    List<quote> quotes = [];
+    for (Map<String, dynamic> map in maps) {
+      quotes.add(quote.fromMap(map));
+    }
+    return quotes;
   }
 
-  // Method to retrieve a quote by its ID
-  Future<quote?> getQuoteById(int id) async {
-    final db = await database;
-    final List<Map<String, dynamic>> maps =
-        await db.query('Quote', where: 'quoteID = ?', whereArgs: [id]);
-    if (maps.isEmpty) return null;
-    return quote.fromMap(maps.first);
-  }
-
-  // Method to update an existing quote in the database
+  // Update a quote in the database
   Future<int> updateQuote(quote quote) async {
-    final db = await database;
-    return db.update('Quote', quote.toMap(),
-        where: 'quoteID = ?', whereArgs: [quote.quoteId]);
+    Database db = await database;
+    int result = await db.update(
+      quoteTable,
+      quote.toMap(),
+      where: '$colQuoteId = ?',
+      whereArgs: [quote.quoteId],
+    );
+    return result;
   }
 
-  // Method to delete a quote from the database
+  // Delete a quote from the database
   Future<int> deleteQuote(int id) async {
-    final db = await database;
-    return db.delete('Quote', where: 'quoteID = ?', whereArgs: [id]);
+    Database db = await database;
+    int result = await db.delete(
+      quoteTable,
+      where: '$colQuoteId = ?',
+      whereArgs: [id],
+    );
+    return result;
   }
 
   //CRUD operations for Category table

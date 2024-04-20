@@ -1,7 +1,7 @@
-import 'package:audio_player/models/Music.dart';
+import 'package:audio_player/models/quote.dart';
 import 'package:audio_player/models/categorydb.dart';
 import 'package:audio_player/services/CategoryOperations.dart';
-import 'package:audio_player/services/MusicOperations.dart';
+import 'package:audio_player/services/quoteOperations.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatelessWidget {
@@ -29,11 +29,8 @@ class Home extends StatelessWidget {
     );
   }
 
-  // ignore: non_constant_identifier_names
-  Future<List<Widget>> CreatelistOfCategories() async {
-    List<Category> categoryList =
-        await CategoryOperations.getCategories(); // await the result
-    // convert data to widget using map function
+  Future<List<Widget>> createListOfCategories() async {
+    List<Category> categoryList = await CategoryOperations.getCategories();
     List<Widget> categories = categoryList
         .map((Category category) => createCategory(category))
         .toList();
@@ -41,7 +38,7 @@ class Home extends StatelessWidget {
     return categories;
   }
 
-  Widget createMusic(Music music) {
+  Widget createQuote(quote quote) {
     return Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -50,27 +47,27 @@ class Home extends StatelessWidget {
             width: 200,
             child: InkWell(
               onTap: () {
-                _miniPlayer(music, stop: true);
+                // Handle quote tap
               },
               child: Image.network(
-                music.image,
+                quote.imageURL,
                 fit: BoxFit.cover,
               ),
             ),
           ),
           Text(
-            music.name,
+            quote.quoteText,
             style: const TextStyle(color: Colors.white),
           ),
           Text(
-            music.desc,
+            // Assuming you want to display author's name
+            quote.author,
             style: const TextStyle(color: Colors.white),
           ),
         ]));
   }
 
-  Widget createMusicList(String label) {
-    List<Music> musicList = MusicOperations.getMusic();
+  Widget createQuoteList(String label) {
     return Padding(
         padding: const EdgeInsets.only(left: 10),
         child: Column(
@@ -81,42 +78,29 @@ class Home extends StatelessWidget {
                     color: Colors.white,
                     fontSize: 20,
                     fontWeight: FontWeight.bold)),
-            SizedBox(
-              height: 300,
-              child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return createMusic(musicList[index]);
-                  },
-                  itemCount: musicList.length),
-            )
+            FutureBuilder<List<quote>>(
+              future: QuoteOperations.getAllQuotes(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  List<Widget> quoteWidgets = snapshot.data!
+                      .map((quote) => createQuote(quote))
+                      .toList();
+                  return SizedBox(
+                    height: 300,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: quoteWidgets,
+                    ),
+                  );
+                }
+              },
+            ),
           ],
         ));
-  }
-
-  Widget createGrid() {
-    return FutureBuilder<List<Widget>>(
-      future: CreatelistOfCategories(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
-        } else if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
-        } else {
-          return Container(
-            padding: const EdgeInsets.all(10),
-            height: 285,
-            child: GridView.count(
-              childAspectRatio: 5 / 2,
-              mainAxisSpacing: 10,
-              crossAxisSpacing: 10,
-              crossAxisCount: 2,
-              children: snapshot.data!,
-            ),
-          );
-        }
-      },
-    );
   }
 
   Widget createAppBar(String message) {
@@ -149,9 +133,30 @@ class Home extends StatelessWidget {
             const SizedBox(
               height: 5,
             ),
-            createGrid(),
-            createMusicList('Made For You'),
-            createMusicList('popular Playlists')
+            FutureBuilder<List<Widget>>(
+              future: createListOfCategories(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  return Container(
+                    padding: const EdgeInsets.all(10),
+                    height: 285,
+                    child: GridView.count(
+                      childAspectRatio: 5 / 2,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10,
+                      crossAxisCount: 2,
+                      children: snapshot.data!,
+                    ),
+                  );
+                }
+              },
+            ),
+            createQuoteList('Quotes'),
+            // Additional methods for displaying other types of data if needed
           ],
         ),
       )),

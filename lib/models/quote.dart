@@ -1,59 +1,51 @@
 class quote {
   late int quoteId;
-  late int srcID;
-  late int authID;
-  String text;
+  late int quoteSourceId; // Foreign key for the source
+  late int quoteAuthorId; // Foreign key for the author
+  String quoteText;
+  String imageURL;
+  String audioURL;
 
   quote({
-    required this.srcID,
-    required this.text,
-    required this.authID,
+    required this.quoteSourceId,
+    required this.quoteText,
+    required this.quoteAuthorId,
+    required this.imageURL,
+    required this.audioURL,
   });
 
   quote.withId({
     required this.quoteId,
-    required this.srcID,
-    required this.text,
-    required this.authID,
+    required this.quoteSourceId,
+    required this.quoteText,
+    required this.quoteAuthorId,
+    required this.imageURL,
+    required this.audioURL,
   });
-
-  // Getter methods for sourceID, text, and authorID
-  int get quoteSourceID => srcID;
-  String get quoteText => text;
-  int get quoteAuthorID => authID;
-
-  // Setter methods for sourceID, text, and authorID
-  set quoteSourceID(int srcID) {
-    this.srcID = srcID;
-  }
-
-  set quoteText(String text) {
-    this.text = text;
-  }
-
-  set quoteAuthorID(int authID) {
-    this.authID = authID;
-  }
 
   // Convert Quote object to a Map object
   Map<String, dynamic> toMap() {
     var map = Map<String, dynamic>();
     if (quoteId != null) {
-      map['quoteID'] = quoteId;
+      map['quoteId'] = quoteId;
     }
-    map['srcID'] = srcID;
-    map['text'] = text;
-    map['authID'] = authID;
+    map['quoteSourceId'] = quoteSourceId;
+    map['quoteText'] = quoteText;
+    map['quoteAuthorId'] = quoteAuthorId;
+    map['imageURL'] = imageURL;
+    map['audioURL'] = audioURL;
     return map;
   }
 
   // Convert a Map object to Quote object
   static quote fromMap(Map<String, dynamic> map) {
     return quote.withId(
-      quoteId: map['quoteID'],
-      srcID: map['srcID'],
-      text: map['text'],
-      authID: map['authID'],
+      quoteId: map['quoteId'],
+      quoteSourceId: map['quoteSourceId'],
+      quoteText: map['quoteText'],
+      quoteAuthorId: map['quoteAuthorId'],
+      imageURL: map['imageURL'],
+      audioURL: map['audioURL'],
     );
   }
 }

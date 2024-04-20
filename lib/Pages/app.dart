@@ -6,13 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
   String audiosset = "assests/";
-  AudioPlayer _audioPlayer = new AudioPlayer();
+  final AudioPlayer _audioPlayer = AudioPlayer();
+  // ignore: non_constant_identifier_names
   var Tabs = [];
   Music? music;
   int currentTabIndex = 0;
@@ -23,7 +26,7 @@ class _MyAppState extends State<MyApp> {
     setState(() {});
     Size deviceSize = MediaQuery.of(context).size;
     if (music == null) {
-      return SizedBox();
+      return const SizedBox();
     }
     if (stop) {
       isPlaying = false;
@@ -67,7 +70,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    Tabs = [Home(miniPlayer), search(), yourlibrary()];
+    Tabs = [Home(miniPlayer), const search(), yourlibrary()];
   }
 
   @override
@@ -82,11 +85,11 @@ class _MyAppState extends State<MyApp> {
           BottomNavigationBar(
               currentIndex: currentTabIndex,
               onTap: (currentIndex) {
-                print("The Current Index is $currentIndex");
+                //print("The Current Index is $currentIndex");
                 currentTabIndex = currentIndex;
                 setState(() {}); //rendering re
               },
-              selectedLabelStyle: TextStyle(color: Colors.white),
+              selectedLabelStyle: const TextStyle(color: Colors.white),
               backgroundColor: Colors.black45,
               items: const [
                 BottomNavigationBarItem(
