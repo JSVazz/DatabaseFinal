@@ -4,9 +4,10 @@ import 'package:audio_player/Pages/home.dart';
 import 'package:audio_player/Pages/search.dart';
 import 'package:audio_player/Pages/yourlibrary.dart';
 import 'package:audio_player/models/quote.dart';
+import 'package:path_provider/path_provider.dart';
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -36,14 +37,14 @@ class _MyAppState extends State<MyApp> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            if (_quote != null)
+            if (_quote != null && _quote!.imageURL != null)
               Image.network(
-                _quote!.imageURL,
+                _quote!.imageURL!,
                 fit: BoxFit.cover,
               ),
             if (_quote != null)
               Text(
-                _quote!.quoteText,
+                _quote!.quoteText ?? '',
                 style: const TextStyle(color: Colors.white, fontSize: 20),
               ),
             IconButton(
@@ -100,10 +101,15 @@ class _MyAppState extends State<MyApp> {
   void _togglePlayback() {
     setState(() {
       _isPlaying = !_isPlaying;
-      if (_isPlaying) {
-        _playAudio(_quote!.audioURL);
+      if (_quote != null) {
+        if (_isPlaying) {
+          _playAudio(_quote!.audioURL);
+        } else {
+          _pauseAudio();
+        }
       } else {
-        _pauseAudio();
+        // Handle the case where _quote is null
+        print('Error: _quote is null.');
       }
     });
   }
