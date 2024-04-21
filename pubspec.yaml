@@ -40,6 +40,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   audioplayers: ^6.0.0
 
+  path: any
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -63,8 +64,19 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-# assets:
-#audio files here!!!
+  assets:
+    - assets/Youre_Finally_Awake.mp3
+    - assets/Yeah_Baby.mp3
+    - assets/This_is_Sparta.mp3
+    - assets/Silence.mp3
+    - assets/Prepare_to_Die.mp3
+    - assets/Never_Give_Up.mp3
+    - assets/Just_Do_It.mp3
+    - assets/Just_a_Theory.mp3
+    - assets/For_Science.mp3
+    - assets/Bing_Bing_Bong.mp3
+    - assets/No_Man_is_Free.mp3
+    - assets/Spaghetti_Sauce.mp3
 
 
 

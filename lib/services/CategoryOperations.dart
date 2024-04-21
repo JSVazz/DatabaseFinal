@@ -6,14 +6,14 @@ class CategoryOperations {
   static Future<List<Category>> getCategories() async {
     List<Category> categories = [];
     List<Category> dbCategories = await DatabaseHelper().getAllCategories();
-    dbCategories.forEach((dbCategory) {
+    for (var dbCategory in dbCategories) {
       Category newCategory = Category.withoutID(
         categoryName: dbCategory.categoryName,
         description: dbCategory.description,
         imageURL: dbCategory.imageURL,
       );
       categories.add(newCategory);
-    });
+    }
     return categories;
   }
 }

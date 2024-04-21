@@ -26,7 +26,6 @@ class DatabaseHelper {
   // Source Table
   String sourceTable = 'Source';
   String colSourceId = 'sourceID';
-  String colSourceAuthor = 'author';
   String colSourceYear = 'year';
   String colSourceType = 'type';
 
@@ -84,10 +83,9 @@ class DatabaseHelper {
     // create Source table
     await db.execute('''
       CREATE TABLE $sourceTable(
-        $colSourceId INTEGER PRIMARY KEY AUTOINCREMENT, 
-        $colSourceAuthor TEXT, 
+        $colSourceId INTEGER PRIMARY KEY AUTOINCREMENT,  
         $colSourceYear TEXT,
-        $colSourceYear TEXT)
+        $colSourceType TEXT)
       ''');
 
     // create Quote table
@@ -122,6 +120,198 @@ class DatabaseHelper {
         $colUserUsername TEXT
       )
     ''');
+  }
+
+  static Future<void> insertDataIntoDatabase() async {
+    try {
+      // Insert authors
+      final authorId1 = await DatabaseHelper().createAuthor(
+          author(name: "Matsuoka Shuzo", occupation: "Motivational Speaker"));
+      final authorId2 = await DatabaseHelper().createAuthor(author(
+          name: "Shia LaBeouf", occupation: "American Actor and Performer"));
+      final authorId3 = await DatabaseHelper()
+          .createAuthor(author(name: "Cicero", occupation: "Roman Statesman"));
+      final authorId4 = await DatabaseHelper().createAuthor(
+          author(name: "Epictetus", occupation: "Greek Stoic Philosopher"));
+      final authorId5 = await DatabaseHelper().createAuthor(
+          author(name: "Donald J. Trump", occupation: "Former US President"));
+      final authorId6 = await DatabaseHelper().createAuthor(
+          author(name: "Joseph R. Biden Jr", occupation: "US President"));
+      final authorId7 = await DatabaseHelper().createAuthor(
+          author(name: "Michael J. Gough", occupation: "Voice Actor"));
+      final authorId8 = await DatabaseHelper().createAuthor(
+          author(name: "Ellen McLain", occupation: "Voice Actor"));
+      final authorId9 = await DatabaseHelper()
+          .createAuthor(author(name: "Pedro Pascal", occupation: "Actor"));
+      final authorId10 = await DatabaseHelper()
+          .createAuthor(author(name: "Gerard Butler", occupation: "Actor"));
+      final authorId11 = await DatabaseHelper().createAuthor(
+          author(name: "Matthew Patrick", occupation: "YouTuber"));
+      final authorId12 = await DatabaseHelper().createAuthor(author(
+          name: "Charles Christopher White Jr. (Cr1TiKaL)",
+          occupation: "YouTuber"));
+
+      // Insert sources
+      final sourceId1 = await DatabaseHelper().createSource(
+          source(year: "2010", type: "Shuzo.co.jp. similar to Youtube"));
+      final sourceId2 = await DatabaseHelper().createSource(
+          source(year: "2015", type: "@motivashian4248, YouTube"));
+      final sourceId3 = await DatabaseHelper().createSource(
+          source(year: "106 BC - 43 BC", type: "@quotes_official, YouTube"));
+      final sourceId4 = await DatabaseHelper().createSource(
+          source(year: "AD 50 - AD 135", type: "@quotes_official, YouTube"));
+      final sourceId5 = await DatabaseHelper().createSource(
+          source(year: "2016", type: "Rally in Lakeland Florida"));
+      final sourceId6 = await DatabaseHelper().createSource(source(
+          year: "2020",
+          type: "C-Span, Teamsters Presidential Candidate Forum"));
+      final sourceId7 = await DatabaseHelper().createSource(
+          source(year: "2011", type: "The Elder Scrolls V: Skyrim"));
+      final sourceId8 = await DatabaseHelper()
+          .createSource(source(year: "2011", type: "Portal 2"));
+      final sourceId9 = await DatabaseHelper()
+          .createSource(source(year: "1987", type: "The Princess Bride"));
+      final sourceId10 = await DatabaseHelper()
+          .createSource(source(year: "2006", type: "The 300"));
+      final sourceId11 = await DatabaseHelper()
+          .createSource(source(year: "2011", type: "@GameTheory"));
+      final sourceId12 = await DatabaseHelper()
+          .createSource(source(year: "2020", type: "@penguinz0, YouTube"));
+
+      // Insert categories
+      final categoryId1 = await DatabaseHelper().createCategory(Category.withoutID(
+          categoryName: "Inspirational",
+          description:
+              "Fuel for the soul, inspiring words to ignite your inner fire",
+          imageURL:
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW3cpc2w-pPTUnjMQC5vHF3eodBKS06vus0A&s"));
+      final categoryId2 = await DatabaseHelper().createCategory(Category.withoutID(
+          categoryName: "Philosophical",
+          description:
+              "Exploring the depths of thought, these quotes ponder the mysteries of existence",
+          imageURL:
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOcSwmNfT2m6UB6F88ENT14vdR6S6DXEWNew&s"));
+      final categoryId3 = await DatabaseHelper().createCategory(Category.withoutID(
+          categoryName: "Political",
+          description:
+              "Insights into power dynamics, societal change, and the pulse of governance",
+          imageURL:
+              "blahttps://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkiPffq9GOvPW6FGjZZcpV-Q4vKC5MkY2idA&snk"));
+      final categoryId4 = await DatabaseHelper().createCategory(Category.withoutID(
+          categoryName: "Videogames",
+          description:
+              "From pixels to passion, quotes that celebrate the immersive worlds of gaming",
+          imageURL:
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1Vvqxgu8G57iL_ODpUIRhUXkuH2rpZT6K1Q&s"));
+      final categoryId5 = await DatabaseHelper().createCategory(Category.withoutID(
+          categoryName: "Youtube",
+          description:
+              "From viral sensations to profound insights, quotes that define the digital era's cultural landscape",
+          imageURL:
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStAuG4Pk2gEdMBCCyJ0WR5tzOwxi7gTnYodw&s"));
+      final categoryId6 = await DatabaseHelper().createCategory(Category.withoutID(
+          categoryName: "Movies",
+          description:
+              "Capturing the magic of cinema, one iconic line at a time",
+          imageURL:
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjPlyw4jFcIQ16wAen0OyD4NpAzldtGjXLqA&s"));
+
+      // Insert quotes
+      final quoteId1 = await DatabaseHelper().createQuote(quote(
+          quoteSourceId: sourceId1,
+          quoteText:
+              "You have to just try! You will surely accomplish your goal! That's why you should never give up!",
+          quoteAuthorId: authorId1,
+          imageURL:
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW3cpc2w-pPTUnjMQC5vHF3eodBKS06vus0A&s",
+          audioURL: "Never_Give_Up.mp3"));
+      final quoteId2 = await DatabaseHelper().createQuote(quote(
+          quoteSourceId: sourceId2,
+          quoteText:
+              "Do it! Just do it! Don't let your dreams be dreams. Yesterday you said tomorrow, so just do it!",
+          quoteAuthorId: authorId2,
+          imageURL:
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW3cpc2w-pPTUnjMQC5vHF3eodBKS06vus0A&s",
+          audioURL: "Just_Do_It.mp3"));
+      final quoteId3 = await DatabaseHelper().createQuote(quote(
+          quoteSourceId: sourceId3,
+          quoteText: "Silence is one of the great arts of conversation.",
+          quoteAuthorId: authorId3,
+          imageURL:
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW3cpc2w-pPTUnjMQC5vHF3eodBKS06vus0A&s",
+          audioURL: "Silence_Great_Arts_Conversation.mp3"));
+      final quoteId4 = await DatabaseHelper().createQuote(quote(
+          quoteSourceId: sourceId4,
+          quoteText:
+              "Wealth consists not in having great possessions, but in having few wants.",
+          quoteAuthorId: authorId4,
+          imageURL:
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW3cpc2w-pPTUnjMQC5vHF3eodBKS06vus0A&s",
+          audioURL: "Wealth_Few_Wants.mp3"));
+      final quoteId5 = await DatabaseHelper().createQuote(quote(
+          quoteSourceId: sourceId5,
+          quoteText:
+              "We will no longer surrender this country or its people to the false song of globalism.",
+          quoteAuthorId: authorId5,
+          imageURL:
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW3cpc2w-pPTUnjMQC5vHF3eodBKS06vus0A&s",
+          audioURL: "Globalism_False_Song.mp3"));
+      final quoteId6 = await DatabaseHelper().createQuote(quote(
+          quoteSourceId: sourceId6,
+          quoteText:
+              "We choose unity over division. We choose science over fiction. We choose truth over facts.",
+          quoteAuthorId: authorId6,
+          imageURL:
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW3cpc2w-pPTUnjMQC5vHF3eodBKS06vus0A&s",
+          audioURL: "Unity_Over_Division.mp3"));
+      final quoteId7 = await DatabaseHelper().createQuote(quote(
+          quoteSourceId: sourceId7,
+          quoteText:
+              "I used to be an adventurer like you. Then I took an arrow in the knee.",
+          quoteAuthorId: authorId7,
+          imageURL:
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW3cpc2w-pPTUnjMQC5vHF3eodBKS06vus0A&s",
+          audioURL: "Adventurer_Like_You.mp3"));
+      final quoteId8 = await DatabaseHelper().createQuote(quote(
+          quoteSourceId: sourceId8,
+          quoteText:
+              "This was a triumph. I'm making a note here: HUGE SUCCESS.",
+          quoteAuthorId: authorId8,
+          imageURL:
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW3cpc2w-pPTUnjMQC5vHF3eodBKS06vus0A&s",
+          audioURL: "This_Was_Triumph.mp3"));
+      final quoteId9 = await DatabaseHelper().createQuote(quote(
+          quoteSourceId: sourceId9,
+          quoteText:
+              "Hello. My name is Inigo Montoya. You killed my father. Prepare to die.",
+          quoteAuthorId: authorId9,
+          imageURL:
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW3cpc2w-pPTUnjMQC5vHF3eodBKS06vus0A&s",
+          audioURL: "Hello_Inigo_Montoya.mp3"));
+      final quoteId10 = await DatabaseHelper().createQuote(quote(
+          quoteSourceId: sourceId10,
+          quoteText: "This is Sparta!",
+          quoteAuthorId: authorId10,
+          imageURL:
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW3cpc2w-pPTUnjMQC5vHF3eodBKS06vus0A&s",
+          audioURL: "This_Is_Sparta.mp3"));
+      final quoteId11 = await DatabaseHelper().createQuote(quote(
+          quoteSourceId: sourceId11,
+          quoteText: "Hello Internet! Welcome to Game Theory!",
+          quoteAuthorId: authorId11,
+          imageURL:
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW3cpc2w-pPTUnjMQC5vHF3eodBKS06vus0A&s",
+          audioURL: "Hello_Game_Theory.mp3"));
+      final quoteId12 = await DatabaseHelper().createQuote(quote(
+          quoteSourceId: sourceId12,
+          quoteText: "I like that boulder. That is a nice boulder.",
+          quoteAuthorId: authorId12,
+          imageURL:
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW3cpc2w-pPTUnjMQC5vHF3eodBKS06vus0A&s",
+          audioURL: "I_Like_That_Boulder.mp3"));
+    } catch (e) {
+      print('Error inserting data: $e');
+    }
   }
 
   //CRUD operations for Author table
@@ -163,14 +353,15 @@ class DatabaseHelper {
   }
 
   //CRUD operations for Source table
-  // Create a new source
-  Future<void> insertSource(source source) async {
+  // Create a new source and return its ID
+  Future<int> createSource(source source) async {
     final db = await database;
-    await db.insert(
+    int sourceId = await db.insert(
       'Source',
       source.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+    return sourceId;
   }
 
   // Retrieve all sources
@@ -180,15 +371,6 @@ class DatabaseHelper {
     return List.generate(maps.length, (i) {
       return source.fromMap(maps[i]);
     });
-  }
-
-  // Retrieve a specific source by its ID
-  Future<source?> getSourceById(int id) async {
-    final db = await database;
-    final List<Map<String, dynamic>> maps =
-        await db.query('Source', where: 'sourceID = ?', whereArgs: [id]);
-    if (maps.isEmpty) return null;
-    return source.fromMap(maps.first);
   }
 
   // Update a source
@@ -214,10 +396,36 @@ class DatabaseHelper {
 
   //CRUD operations for Quote table
   // Insert a quote into the database
-  Future<int> insertQuote(quote quote) async {
+  Future<int> createQuote(quote quote) async {
     Database db = await database;
-    int result = await db.insert(quoteTable, quote.toMap());
-    return result;
+    int? result;
+
+    await db.transaction((txn) async {
+      // Check if the source exists
+      var sourceExists = await txn.query(
+        'Source',
+        where: 'sourceID = ?',
+        whereArgs: [quote.quoteSourceId],
+      );
+
+      // Check if the author exists
+      var authorExists = await txn.query(
+        'Author',
+        where: 'authorId = ?',
+        whereArgs: [quote.quoteAuthorId],
+      );
+
+      // If both the source and author exist, insert the quote
+      if (sourceExists.isNotEmpty && authorExists.isNotEmpty) {
+        result = await txn.insert(quoteTable, quote.toMap());
+      } else {
+        // Handle the case where either the source or author does not exist
+        print('Error: Invalid source or author ID');
+        // You can throw an exception or handle this error as appropriate for your application
+      }
+    });
+
+    return result ?? -1; // Return -1 if the transaction failed
   }
 
   // Retrieve a quote from the database based on its ID
@@ -328,7 +536,7 @@ class DatabaseHelper {
 
   //CRUD operations for User table
   // Create a new user
-  Future<void> insertUser(user user) async {
+  Future<void> createUser(user user) async {
     final db = await database;
     await db.insert(
       userTable,

@@ -25,10 +25,8 @@ class quote {
 
   // Convert Quote object to a Map object
   Map<String, dynamic> toMap() {
-    var map = Map<String, dynamic>();
-    if (quoteId != null) {
-      map['quoteId'] = quoteId;
-    }
+    var map = <String, dynamic>{};
+    map['quoteId'] = quoteId;
     map['quoteSourceId'] = quoteSourceId;
     map['quoteText'] = quoteText;
     map['quoteAuthorId'] = quoteAuthorId;

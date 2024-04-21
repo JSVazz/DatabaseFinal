@@ -1,9 +1,9 @@
+import 'package:flutter/material.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:audio_player/Pages/home.dart';
 import 'package:audio_player/Pages/search.dart';
 import 'package:audio_player/Pages/yourlibrary.dart';
 import 'package:audio_player/models/quote.dart';
-import 'package:flutter/material.dart';
-import 'package:audioplayers/audioplayers.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -22,7 +22,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    _tabs = [Home(_miniPlayer), const search(), yourlibrary()];
+    _tabs = [Home(_togglePlayback), const search(), const yourlibrary()];
   }
 
   Widget _miniPlayer() {
@@ -47,17 +47,7 @@ class _MyAppState extends State<MyApp> {
                 style: const TextStyle(color: Colors.white, fontSize: 20),
               ),
             IconButton(
-              onPressed: () {
-                setState(() {
-                  _isPlaying = !_isPlaying;
-                  if (_isPlaying) {
-                    _audioPlayer.play(_quote!.audioURL
-                        as Source); // casted the String AudioURL quote object as a source. may not work in testing
-                  } else {
-                    _audioPlayer.pause();
-                  }
-                });
-              },
+              onPressed: _togglePlayback,
               icon: Icon(
                 _isPlaying ? Icons.pause : Icons.play_arrow,
                 color: Colors.white,
@@ -105,5 +95,29 @@ class _MyAppState extends State<MyApp> {
         ],
       ),
     );
+  }
+
+  void _togglePlayback() {
+    setState(() {
+      _isPlaying = !_isPlaying;
+      if (_isPlaying) {
+        _playAudio(_quote!.audioURL);
+      } else {
+        _pauseAudio();
+      }
+    });
+  }
+
+  void _playAudio(String audioUrl) async {
+    try {
+      await _audioPlayer.play(audioUrl as Source);
+    } catch (e) {
+      // Handle error
+      print('Error playing audio: $e');
+    }
+  }
+
+  void _pauseAudio() {
+    _audioPlayer.pause();
   }
 }

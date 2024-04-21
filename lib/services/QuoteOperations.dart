@@ -7,7 +7,7 @@ class QuoteOperations {
   static Future<List<quote>> getAllQuotes() async {
     List<quote> quotes = [];
     List<quote> dbQuotes = await _dbHelper.getAllQuotes();
-    dbQuotes.forEach((dbQuote) {
+    for (var dbQuote in dbQuotes) {
       quote newQuote = quote(
         quoteSourceId: dbQuote.quoteSourceId,
         quoteText: dbQuote.quoteText,
@@ -16,7 +16,7 @@ class QuoteOperations {
         audioURL: dbQuote.audioURL,
       );
       quotes.add(newQuote);
-    });
+    }
     return quotes;
   }
 }

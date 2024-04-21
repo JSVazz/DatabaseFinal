@@ -37,11 +37,9 @@ class author {
 
   // Convert Author object to a Map object
   Map<String, dynamic> toMap() {
-    var map = Map<String, dynamic>();
-    if (authorId != null) {
-      map['authorId'] = authorId;
-    }
-    map['name'] = name;
+    var map = <String, dynamic>{};
+    map['authorId'] = authorId;
+      map['name'] = name;
     map['occupation'] = occupation;
     return map;
   }
